@@ -36,9 +36,15 @@ build() {
   emcc $c_files -O3 -D_ERROR_PRINT -s TOTAL_MEMORY=419430400 -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 --js-library library.js $EXPORT_FLAGS -Isrc -Iinc --extern-pre-js ../templates/DecoderPre.js --extern-post-js ../templates/DecoderPost.js -o ./js/avc.js
 }
 
+copy_files() {
+  cp ./js/avc.js ../Player/Decoder.js
+  cp ./js/avc.wasm ../Player/
+}
+
 main() {
   ensure_emscripten
   build
+  copy_files
 }
 
 main
