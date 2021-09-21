@@ -33,7 +33,7 @@ ensure_emscripten() {
 }
 
 build() {
-    emcc $c_files -O3 -D_ERROR_PRINT -s TOTAL_MEMORY=52428800 -s ALLOW_MEMORY_GROWTH=0 -s WASM=1 --js-library library.js $EXPORT_FLAGS -Isrc -Iinc --extern-pre-js ../templates/DecoderPre.js --extern-post-js ../templates/DecoderPost.js -o ./js/avc.js
+  emcc $c_files -O3 -D_ERROR_PRINT -s TOTAL_MEMORY=419430400 -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 --js-library library.js $EXPORT_FLAGS -Isrc -Iinc --extern-pre-js ../templates/DecoderPre.js --extern-post-js ../templates/DecoderPost.js -o ./js/avc.js
 }
 
 main() {
