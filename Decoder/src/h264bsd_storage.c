@@ -37,8 +37,6 @@
 
 ------------------------------------------------------------------------------*/
 
-#include "opttarget.h"
-
 /*------------------------------------------------------------------------------
     1. Include headers
 ------------------------------------------------------------------------------*/
@@ -59,6 +57,10 @@
 --------------------------------------------------------------------------------
     3. Module defines
 ------------------------------------------------------------------------------*/
+
+#ifndef UINT32_MAX
+#define UINT32_MAX       (4294967295U)
+#endif
 
 /*------------------------------------------------------------------------------
     4. Local function prototypes
@@ -328,9 +330,23 @@ u32 h264bsdActivateParamSets(storage_t *pStorage, u32 ppsId, u32 isIdr)
         pStorage->activePps = pStorage->pps[ppsId];
         pStorage->activeSpsId = pStorage->activePps->seqParameterSetId;
         pStorage->activeSps = pStorage->sps[pStorage->activeSpsId];
-        pStorage->picSizeInMbs =
-            pStorage->activeSps->picWidthInMbs *
-            pStorage->activeSps->picHeightInMbs;
+
+        /* report error before multiplication to prevent integer overflow */
+        if (pStorage->activeSps->picWidthInMbs == 0)
+        {
+            pStorage->picSizeInMbs = 0;
+        }
+        else if (pStorage->activeSps->picHeightInMbs >
+                 UINT32_MAX / pStorage->activeSps->picWidthInMbs)
+        {
+            return(MEMORY_ALLOCATION_ERROR);
+        }
+        else
+        {
+            pStorage->picSizeInMbs =
+                pStorage->activeSps->picWidthInMbs *
+                pStorage->activeSps->picHeightInMbs;
+        }
 
         pStorage->currImage->width = pStorage->activeSps->picWidthInMbs;
         pStorage->currImage->height = pStorage->activeSps->picHeightInMbs;
@@ -456,9 +472,7 @@ void h264bsdResetStorage(storage_t *pStorage)
     for (i = 0; i < pStorage->picSizeInMbs; i++)
     {
         pStorage->mb[i].sliceId = 0;
-#ifndef OPTIMIZE_NO_DECODED_FLAG
         pStorage->mb[i].decoded = 0;
-#endif
     }
 
 }
@@ -530,9 +544,6 @@ u32 h264bsdIsStartOfPicture(storage_t *pStorage)
 
 u32 h264bsdIsEndOfPicture(storage_t *pStorage)
 {
-#ifdef SINGLE_SLICE
-  return(HANTRO_TRUE);
-#else
 
 /* Variables */
 
@@ -556,7 +567,7 @@ u32 h264bsdIsEndOfPicture(storage_t *pStorage)
     }
 
     return(HANTRO_FALSE);
-#endif
+
 }
 
 /*------------------------------------------------------------------------------

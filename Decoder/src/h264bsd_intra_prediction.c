@@ -52,8 +52,6 @@
 
 ------------------------------------------------------------------------------*/
 
-#include "opttarget.h"
-
 /*------------------------------------------------------------------------------
     1. Include headers
 ------------------------------------------------------------------------------*/
@@ -520,10 +518,8 @@ u32 h264bsdIntraPrediction(mbStorage_t *pMb, macroblockLayer_t *mbLayer,
 
     /* if decoded flag > 1 -> mb has already been successfully decoded and
      * written to output -> do not write again */
-#ifndef OPTIMIZE_NO_DECODED_FLAG
     if (pMb->decoded > 1)
         return HANTRO_OK;
-#endif
 
     h264bsdWriteMacroblock(image, data);
 

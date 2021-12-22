@@ -141,7 +141,7 @@
 /* macro to allocate memory */
 #define ALLOCATE(ptr, count, type) \
 { \
-    (ptr) = H264SwDecMalloc((count) * sizeof(type)); \
+    (ptr) = H264SwDecMalloc(sizeof(type), (count)); \
 }
 
 /* macro to free allocated memory */
@@ -151,7 +151,7 @@
 }
 
 #define ALIGN(ptr, bytePos) \
-        (ptr + ( ((bytePos - (uintptr_t)ptr) & (bytePos - 1)) / sizeof(*ptr) ))
+        ((ptr) + ( (((bytePos) - (uintptr_t)(ptr)) & ((bytePos) - 1)) / sizeof(*(ptr)) ))
 
 extern const u32 h264bsdQpC[52];
 
@@ -174,8 +174,6 @@ u32 h264bsdMoreRbspData(strmData_t *strmData);
 u32 h264bsdNextMbAddress(u32 *pSliceGroupMap, u32 picSizeInMbs, u32 currMbAddr);
 
 void h264bsdSetCurrImageMbPointers(image_t *image, u32 mbNum);
-
-void h264bsdWriteSliceMbData(image_t *image, u32 firstMbNum, u32 lastMbNum, u32* pData);
 
 #endif /* #ifdef H264SWDEC_UTIL_H */
 

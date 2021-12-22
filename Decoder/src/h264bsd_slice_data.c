@@ -129,14 +129,12 @@ u32 h264bsdDecodeSliceData(strmData_t *pStrmData, storage_t *pStorage,
     qpY = (i32)pStorage->activePps->picInitQp + pSliceHeader->sliceQpDelta;
     do
     {
-#ifndef OPTIMIZE_NO_DECODED_FLAG
-      /* primary picture and already decoded macroblock -> error */
+        /* primary picture and already decoded macroblock -> error */
         if (!pSliceHeader->redundantPicCnt && pStorage->mb[currMbAddr].decoded)
         {
             EPRINT("Primary and already decoded");
             return(HANTRO_NOK);
         }
-#endif
 
         SetMbParams(pStorage->mb + currMbAddr, pSliceHeader,
             pStorage->slice->sliceId, pStorage->activePps->chromaQpIndexOffset);
@@ -194,9 +192,7 @@ u32 h264bsdDecodeSliceData(strmData_t *pStrmData, storage_t *pStorage,
 
         /* increment macroblock count only for macroblocks that were decoded
          * for the first time (redundant slices) */
-#ifndef OPTIMIZE_NO_DECODED_FLAG
         if (pStorage->mb[currMbAddr].decoded == 1)
-#endif          
             mbCount++;
 
         /* keep on processing as long as there is stream data left or
@@ -298,7 +294,6 @@ void SetMbParams(mbStorage_t *pMb, sliceHeader_t *pSlice, u32 sliceId,
 
 ------------------------------------------------------------------------------*/
 
-#ifndef OPTIMIZE_NO_DECODED_FLAG
 void h264bsdMarkSliceCorrupted(storage_t *pStorage, u32 firstMbInSlice)
 {
 
@@ -356,4 +351,4 @@ void h264bsdMarkSliceCorrupted(storage_t *pStorage, u32 firstMbInSlice)
     } while (currMbAddr);
 
 }
-#endif
+
