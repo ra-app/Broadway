@@ -184,11 +184,11 @@ u32 h264bsdDecodeSliceData(strmData_t *pStrmData, storage_t *pStorage,
         tmp = h264bsdDecodeMacroblock(pStorage->mb + currMbAddr, mbLayer,
             currImage, pStorage->dpb, &qpY, currMbAddr,
             pStorage->activePps->constrainedIntraPredFlag, data);
-        if (tmp != HANTRO_OK)
-        {
-            EPRINT("MACRO_BLOCK");
-            return(tmp);
-        }
+        //if (tmp != HANTRO_OK)
+        //{
+        //    EPRINT("MACRO_BLOCK");
+        //    return(tmp);
+        //}
 
         /* increment macroblock count only for macroblocks that were decoded
          * for the first time (redundant slices) */
