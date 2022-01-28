@@ -3,7 +3,7 @@
 import os, sys, re, json, shutil
 from subprocess import Popen, PIPE, STDOUT
 
-exec(open(os.path.expanduser('~/.emscripten'), 'r').read())
+exec(open(os.path.expanduser('~/emsdk/.emscripten'), 'r').read())
 
 sys.path.append(EMSCRIPTEN_ROOT)
 import tools.shared as emscripten
@@ -17,11 +17,10 @@ emcc_args = [
   '--llvm-lto', '3',
   '-s', 'NO_EXIT_RUNTIME=1',
   '-s', 'NO_FILESYSTEM=1',
-  '-s', 'NO_BROWSER=1',
-  
+  #'-s', 'NO_BROWSER=1',
   #'-s', 'CORRECT_SIGNS=1',
   #'-s', 'CORRECT_OVERFLOWS=1',
-  '-s', 'TOTAL_MEMORY=' + str(50*1024*1024),
+  '-s', 'TOTAL_MEMORY=' + str(50*2048*2048),
   #'-s', 'FAST_MEMORY=' + str(50*1024*1024),
   #'-s', 'ALLOW_MEMORY_GROWTH=0',
   '-s', 'INVOKE_RUN=0',
@@ -29,7 +28,7 @@ emcc_args = [
   #'-s', 'INLINING_LIMIT=50',
   #'-s', 'OUTLINING_LIMIT=100',
   '-s', 'DOUBLE_MODE=0',
-  '-s', 'PRECISE_I64_MATH=0',
+  #'-s', 'PRECISE_I64_MATH=0',
   #'-s', 'SIMD=1',
   '-s', 'AGGRESSIVE_VARIABLE_ELIMINATION=1',
   '-s', 'ALIASING_FUNCTION_POINTERS=1',
